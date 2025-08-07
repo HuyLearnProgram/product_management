@@ -1,0 +1,362 @@
+﻿@using ProductClient.ViewModels
+@model ProductViewModel
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background-color: #f5f5f5;
+        padding: 20px;
+    }
+
+    .save-button {
+        background: #28a745;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-size: 16px;
+        border: 1px solid #28a745;
+        cursor: pointer;
+        font-weight: bold;
+        margin-left: auto;
+        transition: background 0.3s;
+    }
+
+        .save-button i {
+            font-size: 18px;
+        }
+
+        .save-button:hover {
+            background: #fff;
+            border: 1px solid #28a745;
+            color: #28a745;
+        }
+
+    .container {
+        display: flex;
+        gap: 20px;
+    }
+
+    .left-section {
+        flex: 1;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    /* .product-image a img { */
+    /*     width: 1000px; */
+    /*     height: 300px; */
+    /*     border-radius: 5px; */
+    /*     object-fit: cover; */
+    /* } */
+    /* .product-image a img{ */
+    /*     width: 390px; /* Kích thước rộng cố định */ */
+    /*     height: 292px; /* Kích thước cao cố định */ */
+    /*     background-color: #f0f0f0; /* Màu nền nếu không có ảnh */ */
+    /*     display: flex; /* Dùng flexbox để căn chỉnh nội dung */ */
+    /*     justify-content: center; /* Căn giữa theo chiều ngang */ */
+    /*     align-items: center; /* Căn giữa theo chiều dọc */ */
+    /*     border-radius: 5px; */
+    /*     text-align: center; /* Căn giữa chữ */ */
+    /* } */
+    .product-image a img {
+        width: 1000px;
+        height: auto;
+        border-radius: 5px;
+    }
+
+        /* .product-image p { */
+        /*     font-size: 18px; /* Kích thước chữ */ */
+        /*     color: #888; /* Màu chữ */ */
+        /*     margin: 0; /* Đảm bảo không có khoảng cách ngoài */ */
+        /* } */
+
+    .image-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .custom-file-upload {
+        background: #5758BB;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        border: 1px solid #5758BB;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background 0.3s;
+    }
+
+        .custom-file-upload i {
+            font-size: 18px;
+        }
+
+        .custom-file-upload:hover {
+            background: #fff;
+            border: 1px solid #5758BB;
+            color: #5758BB;
+        }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .right-section {
+        width:781px;
+        height:690px;
+        flex: 2;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+            .form-group input[readonly] {
+                cursor: default;
+                background-color: #f8f9fa;
+            }
+
+    .delete-button {
+        background: #dc3545;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-size: 16px;
+        border: 1px solid #dc3545;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+
+        .delete-button i {
+            font-size: 18px;
+        }
+
+        .delete-button:hover {
+            background: #fff;
+            border: 1px solid #dc3545;
+            color: #dc3545;
+        }
+
+    .button-group {
+        display: flex;
+        margin-left: auto;
+        align-items: center;
+        gap: 8px;
+    }
+</style>
+<style>
+
+
+    .confirm-table {
+        display: none; 
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+    }
+
+        .confirm-table table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .confirm-table td {
+            padding: 10px;
+            font-size: 18px;
+        }
+
+    .message {
+        font-weight: bold;
+        font-size: 20px;
+        padding: 10px 0;
+    }
+
+    .yes-button,
+    .no-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .yes-button {
+        background-color: #28a745;
+        color: white;
+    }
+
+        .yes-button:hover {
+            background-color: #218838;
+        }
+
+    .no-button {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .no-button:hover {
+            background-color: #c82333;
+        }
+</style>
+<form method="post" action="/product/Add" enctype="multipart/form-data" id="productForm" onsubmit="return validateForm()">
+    <div class="container">
+        <div class="left-section" style="width:390px">
+            <h2>Product Image</h2>
+
+            <div class="product-image" style="margin-bottom:10px">
+                <img id="previewImage" src="" alt="" class="img-fluid"" />
+                @* <p>No image selected</p> *@
+            </div>
+
+
+            <div class="image-actions">
+                <label for="imageUpload" class="custom-file-upload">
+                    <i class="fa-solid fa-image"></i> Choose Image
+                </label>
+                <input type="file" id="imageUpload" name="ImageFile" accept="image/*" onchange="previewImageEvent(event)" />
+            </div>
+        </div>
+        <div class="right-section">
+            <h2>General Information</h2>
+            <div class="form-group">
+                <label>Product Name</label>
+                <input asp-for="ProductDetail.ProductName" required />
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input asp-for="ProductDetail.Price" type="number" min="1" required />
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input asp-for="ProductDetail.Quantity" type="number" min="1" required />
+            </div>
+            <div class="form-group">
+                <label>Unit</label>
+                <input asp-for="ProductDetail.Unit" />
+            </div>
+            <div class="form-group">
+                <label>Product Description</label>
+                <textarea asp-for="ProductDetail.Description" rows="5" required></textarea>
+            </div>
+            @* <h2>Product Management</h2> *@
+            @* <div class="form-group"> *@
+            @*     <label>Rating</label> *@
+            @*     <input asp-for="ProductDetail.Rating" readonly /> *@
+            @* </div> *@
+            @* <div class="form-group"> *@
+            @*     <label>Sold</label> *@
+            @*     <input asp-for="ProductDetail.Sold" readonly /> *@
+            @* </div> *@
+            <div class="button-group">
+                <button type="submit" class="save-button" onclick="showConfirmTable()">
+                    <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+<div id="confirmTable" class="confirm-table">
+    <table>
+        <tr>
+            <td colspan="2" class="message">Are you sure you want to save this product?</td>
+        </tr>
+        <tr>
+            <td>
+                <button onclick="confirmSave()" class="yes-button">Yes</button>
+            </td>
+            <td>
+                <button onclick="cancelSave()" class="no-button">No</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    function previewImageEvent(event) {
+        var input = event.target;
+        if (input.files && input.files.length > 0) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('previewImage');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function validateForm() {
+       
+        var requiredFields = document.querySelectorAll('[required]');
+        var isValid = true;
+        requiredFields.forEach(function(field) {
+            if (!field.value.trim()) {
+                isValid = false;
+                alert('Please fill in all required fields.');
+            }
+        });
+
+        return isValid;
+    }
+
+    function showConfirmTable(event) {
+        event.preventDefault();
+
+        if (!validateForm()) {
+            return; 
+        }
+
+        document.getElementById('confirmTable').style.display = 'block';
+    }
+
+    function confirmSave() {
+        document.getElementById('productForm').submit();
+    }
+
+    function cancelSave() {
+        document.getElementById('confirmTable').style.display = 'none';
+    }
+</script>

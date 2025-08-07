@@ -1,0 +1,244 @@
+﻿@* @using ProductClient.ViewModels *@
+@* @model ProductViewModel *@
+@* <style> *@
+@*     .card { *@
+@*         display: flex; *@
+@*         flex-direction: column; *@
+@*         height: 100%; *@
+@*     } *@
+
+@*     .card-img-top { *@
+@*         width: 100%; *@
+@*         height: 150px; *@
+@*         object-fit: cover; *@
+@*     } *@
+
+@*     .card-body { *@
+@*         flex-grow: 1; *@
+@*         display: flex; *@
+@*         flex-direction: column; *@
+@*         justify-content: space-between; *@
+@*     } *@
+
+@*     .card-title { *@
+@*         font-size: 16px; *@
+@*         font-weight: bold; *@
+@*         margin-bottom: 10px; *@
+@*         min-height: 64px; /* Đảm bảo chiều cao cố định */ *@
+@*         overflow: hidden; *@
+@*         text-overflow: ellipsis; *@
+@*         display: -webkit-box; *@
+@*         -webkit-line-clamp: 2; *@
+@*         -webkit-box-orient: vertical; *@
+@*     } *@
+
+@*     .pagination { *@
+@*         display: flex; *@
+@*         justify-content: center; *@
+@*         margin-top: 20px; *@
+@*     } *@
+@*     .pagination a { *@
+@*         padding: 10px 15px; *@
+@*         margin: 0 5px; *@
+@*         text-decoration: none; *@
+@*         border: 1px solid #ddd; *@
+@*         border-radius: 5px; *@
+@*     } *@
+
+@*         .pagination a.active { *@
+@*             background-color: #007bff; *@
+@*             color: white; *@
+@*         } *@
+
+@*         .pagination a:hover { *@
+@*             background-color: #ddd; *@
+@*         } *@
+@* </style> *@
+
+@* <div class="container"> *@
+@*     <h1 class="my-4">Danh sách Sản phẩm</h1> *@
+@*     <div class="row"> *@
+@*         @foreach (var product in Model.Products) *@
+@*         { *@
+@*             <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4"> *@
+@*                 <div class="card"> *@
+@*                     <a href="@Url.Action("ProductDetailView", "Product", new { id = product.Id })"> *@
+@*                         <img class="card-img-top" src="@product.ImageUrl" alt="@product.ProductName"> *@
+@*                     </a> *@
+@*                     <div class="card-body text-center"> *@
+@*                         <h5 class="card-title">@product.ProductName</h5> *@
+@*                         <p class="card-text">@product.Price.ToString("C", new System.Globalization.CultureInfo("vi-VN"))</p> *@
+@*                         <a href="@Url.Action("ProductDetailView", "Product", new { id = product.Id })" class="btn btn-primary">Chi tiết</a> *@
+@*                         <div style="margin-bottom:10px"></div> *@
+@*                         <button type="button" class="delete-button" onclick="confirmDelete(@product.Id) "> *@
+@*                             <i class="fa-solid fa-trash"></i> Delete *@
+@*                         </button> *@
+
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*         } *@
+@*     </div> *@
+@* </div> *@
+
+@* <!-- Pagination --> *@
+@* <div class="pagination"> *@
+@*     @if (Model.CurrentPage > 1) *@
+@*     { *@
+@*         <a href="@Url.Action("ProductView", "Product", new { page = Model.CurrentPage - 1 })">&laquo; Trang trước</a> *@
+@*     } *@
+
+@*     @if (Model.CurrentPage > 3) *@
+@*     { *@
+@*         <a href="@Url.Action("ProductView", "Product", new { page = 1 })">1</a> *@
+@*         <span>...</span> *@
+@*     } *@
+
+@*     @for (int i = Math.Max(1, Model.CurrentPage - 2); i <= Math.Min(Model.TotalPages, Model.CurrentPage + 2); i++) *@
+@*     { *@
+@*         <a href="@Url.Action("ProductView", "Product", new { page = i })" class="@(i == Model.CurrentPage ? "active" : "")">@i</a> *@
+@*     } *@
+
+@*     @if (Model.CurrentPage < Model.TotalPages - 2) *@
+@*     { *@
+@*         <span>...</span> *@
+@*         <a href="@Url.Action("ProductView", "Product", new { page = Model.TotalPages })">@Model.TotalPages</a> *@
+@*     } *@
+
+@*     @if (Model.CurrentPage < Model.TotalPages) *@
+@*     { *@
+@*         <a href="@Url.Action("ProductView", "Product", new { page = Model.CurrentPage + 1 })">Trang sau &raquo;</a> *@
+@*     } *@
+@* </div> *@
+
+@* <script> *@
+@*     function confirmDelete(productId) { *@
+@*         if (confirm("Are you sure you want to delete this product?")) { *@
+@*             window.location.href = "/product/delete/" + productId; *@
+@*         } *@
+@*     } *@
+@* </script> *@
+
+@using ProductClient.ViewModels
+@model ProductViewModel
+<style>
+    .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        min-height: 64px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        .pagination a {
+            padding: 10px 15px;
+            margin: 0 5px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+            .pagination a.active {
+                background-color: #007bff;
+                color: white;
+            }
+
+            .pagination a:hover {
+                background-color: #ddd;
+            }
+</style>
+
+<div class="container">
+    <h1 class="my-4">Danh sách Sản phẩm</h1>
+    <div class="row">
+        @foreach (var product in Model.Products)
+        {
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4">
+                <div class="card">
+                    <a href="@Url.Action("ProductDetailView", "Product", new { id = product.Id })">
+                        <img class="card-img-top" src="@product.ImageUrl" alt="@product.ProductName">
+                    </a>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">@product.ProductName</h5>
+                        <p class="card-text">@product.Price.ToString("C", new System.Globalization.CultureInfo("vi-VN"))</p>
+                        <a href="@Url.Action("ProductDetailView", "Product", new { id = product.Id })" class="btn btn-primary">Chi tiết</a>
+                        <div style="margin-bottom:10px"></div>
+
+                        @* <button type="button" class="btn btn-success" *@
+                        
+                        @* > *@
+                        @*     <i class="fa-solid fa-cart-plus"></i> Thêm vào giỏ *@
+                        @* </button> *@
+                        @* <form method="post" action="/cart/add" id="productForm" > *@
+                        <form action="@Url.Action("AddToCart", "Cart",new { productId = product.Id})" method="post">
+                            @* <input type="hidden" name="productId" value="@product.Id" /> *@
+                            <button type="submit" class="btn btn-success" style="display: block; width: 100%;">
+                                <i class="fa-solid fa-cart-plus"></i> Thêm vào giỏ
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Pagination -->
+<div class="pagination">
+    @if (Model.CurrentPage > 1)
+    {
+        <a href="@Url.Action("ProductView", "Product", new { page = Model.CurrentPage - 1 })">&laquo; Trang trước</a>
+    }
+
+    @if (Model.CurrentPage > 3)
+    {
+        <a href="@Url.Action("ProductView", "Product", new { page = 1 })">1</a>
+        <span>...</span>
+    }
+
+    @for (int i = Math.Max(1, Model.CurrentPage - 2); i <= Math.Min(Model.TotalPages, Model.CurrentPage + 2); i++)
+    {
+        <a href="@Url.Action("ProductView", "Product", new { page = i })" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
+    }
+
+    @if (Model.CurrentPage < Model.TotalPages - 2)
+    {
+        <span>...</span>
+        <a href="@Url.Action("ProductView", "Product", new { page = Model.TotalPages })">@Model.TotalPages</a>
+    }
+
+    @if (Model.CurrentPage < Model.TotalPages)
+    {
+        <a href="@Url.Action("ProductView", "Product", new { page = Model.CurrentPage + 1 })">Trang sau &raquo;</a>
+    }
+</div>
