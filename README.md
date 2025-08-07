@@ -13,6 +13,7 @@
 - [🧱 Architecture & Models](#-architecture--models)
 - [🚀 Getting Started](#-getting-started)
 - [📁 Project Structure](#-project-structure)
+- [🖼️ Project Interface](#-project-interface)
 - [📌 Notes](#-notes)
 
 ---
@@ -116,6 +117,41 @@ ProductManagementModule/
 ├── Program.cs             # Entry point
 └── README.md              # Project documentation
 ```
+
+## 🖼️ Project Interface
+Product Management List
+
+![Product Management List](Screenshot/product_list.png)
+
+Product Detail
+
+![Product Detail](Screenshot/product_detail.png)
+
+Add Product
+
+![Add Product](Screenshot/add_product.png)
+
+Delete Product
+
+![Delete Product](Screenshot/delete_product.png)
+
+Cart
+
+![Cart](Screenshot/cart.png)
+
+Order
+
+![Order](Screenshot/order.png)
+
+Order List
+
+![Order List](Screenshot/order_list.png)
+
+Order Detail
+
+![Order Detail](Screenshot/order_detail.png)
+
+
 
 ## 📌 Notes
 - Ensure MySQL is running on port 3306
